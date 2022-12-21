@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+	  <UserSecretsId>0fe77dfc-0c57-448a-a64d-1ff74c4b7b82</UserSecretsId>
+  </PropertyGroup>
+
+</Project>
