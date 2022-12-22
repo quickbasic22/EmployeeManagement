@@ -1,0 +1,27 @@
+﻿@model EmployeeManagement.ViewModels.HomeDetailsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Employee Details";
+}
+
+
+<h1>@Model.PageTitle</h1>
+
+<div class="text-bg-danger">
+    <h4>IEmployeeRepository</h4>
+    <hr />
+</div>
+<div class="text-bg-info">
+       Name: @Model.Employee.Name
+</div>
+<div class="text-bg-info">
+    Email: @Model.Employee.Email
+</div>
+<div class="text-bg-info">
+    Department: @Model.Employee.Department
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

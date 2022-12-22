@@ -1,6 +1,8 @@
 
 
 
+using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Configuration;
 using System.Diagnostics;
 using System.Globalization;
@@ -13,8 +15,11 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddControllersWithViews().AddXmlSerializerFormatters();
 
         builder.Logging.AddDebug();
+
+        builder.Services.AddSingleton<IEmployeeRepository, MockEmployeeReposity>();
        
         // override appsettings
        // builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -28,14 +33,22 @@ internal class Program
 
         var app = builder.Build();
 
-        
+       
 
         if (builder.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
         }
 
-        // app.UseStaticFiles();
+        app.UseStaticFiles();
+        
+
+        app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
 
         //var text = "<hr />";
         //byte[] data = System.Text.Encoding.UTF8.GetBytes(text);
@@ -66,33 +79,33 @@ internal class Program
         //    await next();
         //});
 
-        int index = 1;
-        int[] array = new int[2];
-        string message = string.Format("This is the value at index [{0}]: {1}", index, array);
-        
+        //int index = 1;
+        //int[] array = new int[2];
+        //string message = string.Format("This is the value at index [{0}]: {1}", index, array);
 
-                app.Use(async (context, next) =>
-        {
-        await next();
-        await context.Response.WriteAsync("Hello from third middleware");
-        await context.Response.WriteAsync("Hello from third middleware");
-            app.Logger.LogInformation(message);
-        });
 
-        app.Use(async (context, next) =>
-        {
-            await next();
-            await context.Response.WriteAsync("Hello from second middleware");
-            await context.Response.WriteAsync("Hello from second middleware");
-            app.Logger.LogInformation($"third middleware ran {app.Logger.ToString()}", new int[] { 2, 22 });
-        });
-        app.Use(async (context, next) =>
-        {
-            await next();
-            await context.Response.WriteAsync("Hello from first middleware");
-            await context.Response.WriteAsync("Hello from first middleware");
-            app.Logger.LogInformation($"third middleware ran {args.Length}", new int[] { 1, 11 });
-        });
+        //        app.Use(async (context, next) =>
+        //{
+        //await next();
+        //await context.Response.WriteAsync("Hello from third middleware");
+        //await context.Response.WriteAsync("Hello from third middleware");
+        //    app.Logger.LogInformation(message);
+        //});
+
+        //app.Use(async (context, next) =>
+        //{
+        //    await next();
+        //    await context.Response.WriteAsync("Hello from second middleware");
+        //    await context.Response.WriteAsync("Hello from second middleware");
+        //    app.Logger.LogInformation($"third middleware ran {app.Logger.ToString()}", new int[] { 2, 22 });
+        //});
+        //app.Use(async (context, next) =>
+        //{
+        //    await next();
+        //    await context.Response.WriteAsync("Hello from first middleware");
+        //    await context.Response.WriteAsync("Hello from first middleware");
+        //    app.Logger.LogInformation($"third middleware ran {args.Length}", new int[] { 1, 11 });
+        //});
 
         app.Run();
     }
