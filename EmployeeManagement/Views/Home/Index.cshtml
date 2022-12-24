@@ -11,20 +11,20 @@
             <div class="card-header">
                 <h3>@employee.Name</h3>
             </div>
-            <img class="card-img-top" src="~\images\noimage.png" />
+            <img class="card-img-top" src="~/images/noimage.jpg" asp-append-version />
             <div class="card-footer text-center">
-                <a href="#" class="btn btn-primary align-content-md-between">View</a>
-                <a href="#" class="btn btn-primary align-content-between">Edit</a>
-                <a href="#" class="btn btn-danger align-content-between">Delete</a>
+                <a asp-controller="home" asp-action="details"
+                   asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a>
+                <a href="#" class="btn btn-primary m-1">Edit</a>
+                <a href="#" class="btn btn-danger m-1">Delete</a>
             </div>
         </div>
     }
 </div>
 
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        <script src="~/jquery/jquery.js"></script>
-        <script src="~/bootstrap/js/bootstrap.js"></script>
     }
     }

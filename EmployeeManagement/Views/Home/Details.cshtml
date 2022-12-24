@@ -12,7 +12,7 @@
             </div>
 
             <div class="card-body text-center">
-                <img class="card-img-top" src="~\images\noimage.png" />
+                <img class="card-img-top" src="~/images/noimage.jpg" asp-append-version />
 
                 <h4>Employee ID : @Model.Employee.Id</h4>
                 <h4>Email : @Model.Employee.Email</h4>
@@ -33,7 +33,5 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        <script src="~/jquery/jquery.js"></script>
-        <script src="~/bootstrap/js/bootstrap.js"></script>
     }
     }
