@@ -22,20 +22,20 @@ namespace EmployeeManagement.Controllers
         }
         public IActionResult Edit(int id)
         {
-            ViewBag.HI = "Hi";
-            Employee model = _employeeRepository.GetEmployee(1);
+            Employee model = _employeeRepository.GetEmployee(id);
             return View(model);
         }
         public IActionResult Details(int id)
         {
-            HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
-            {
-                Employee = _employeeRepository.GetEmployee(1),
-                PageTitle = "Employee Details"
-            };
+            var employee = _employeeRepository.GetEmployee(id);
 
+            HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel();
+            homeDetailsViewModel.Employee = employee;
+
+            homeDetailsViewModel.PageTitle = "Home Details View Model";
+            
             return View(homeDetailsViewModel);
         }
-
+       
     }
 }

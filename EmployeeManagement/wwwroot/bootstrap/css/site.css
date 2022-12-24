@@ -2,3 +2,8 @@
     font-size: large;
     background-color: lightblue;
 }
+
+.btn 
+{
+    width: 75px;
+}

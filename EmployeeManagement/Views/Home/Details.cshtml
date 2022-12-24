@@ -1,27 +1,39 @@
-﻿@model EmployeeManagement.ViewModels.HomeDetailsViewModel
+﻿@model HomeDetailsViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Employee Details";
 }
 
+<div class="row justify-content-center m-3">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-header">
+                <h1>@Model.Employee.Name</h1>
+            </div>
 
-<h1>@Model.PageTitle</h1>
+            <div class="card-body text-center">
+                <img class="card-img-top" src="~\images\noimage.png" />
 
-<div class="text-bg-danger">
-    <h4>IEmployeeRepository</h4>
-    <hr />
+                <h4>Employee ID : @Model.Employee.Id</h4>
+                <h4>Email : @Model.Employee.Email</h4>
+                <h4>Department : @Model.Employee.Department</h4>
+            </div>
+            <div href="#" class="btn btn-primary align-content-between">Back</div>
+            <div href="#" class="btn btn-primary align-content-between">Edit</div>
+            <div href="#" class="btn btn-danger align-content-between">Delete</div>
+        </div>
+    </div>
 </div>
-<div class="text-bg-info">
-       Name: @Model.Employee.Name
-</div>
-<div class="text-bg-info">
-    Email: @Model.Employee.Email
-</div>
-<div class="text-bg-info">
-    Department: @Model.Employee.Department
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Employee.Id })
     <a asp-action="Index">Back to List</a>
-</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/jquery/jquery.js"></script>
+        <script src="~/bootstrap/js/bootstrap.js"></script>
+    }
+    }
