@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Models;
+﻿using EmployeeManagement.Data;
+using EmployeeManagement.Models;
 using EmployeeManagement.ViewModels;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,15 @@ namespace EmployeeManagement.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly EmployeeManagementContext _employeeRepository;
 
-        public HomeController(IEmployeeRepository employeeRepository)
+        public HomeController(EmployeeManagementContext context)
         {
-            this._employeeRepository = employeeRepository;
+            this._employeeRepository = context;
         }
         public IActionResult Index()
         {
-            var model = _employeeRepository.GetAllEmployees();
+            var model = _employeeRepository.Employees.ToList();
             return View(model);
         }
         public IActionResult Edit(int id)
@@ -36,6 +37,20 @@ namespace EmployeeManagement.Controllers
             
             return View(homeDetailsViewModel);
         }
-       
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+               
+            }
+            return View(employee);
+        }
+
     }
 }
