@@ -24,21 +24,24 @@ public class EmployeeManagementContext : DbContext
                  Id = 1,
                  Name = "Mary",
                  Department = Employee.Dept.IT,
-                 Email = "mary@pramimtech.com"
+                 Email = "mary@pramimtech.com",
+                 PhotoPath = "~/Images/noimage.jpg"
              },
              new Employee
              {
                  Id = 2,
                  Name = "John",
                  Department = Employee.Dept.HR,
-                 Email = "john@pragimtech.com"
+                 Email = "john@pragimtech.com",
+                 PhotoPath = "~/Images/noimage.jpg"
              },
              new Employee
              {
                  Id = 3,
                  Name = "Sam",
                  Department = Employee.Dept.IT,
-                 Email = "sam@pragimtech.com"
+                 Email = "sam@pragimtech.com",
+                 PhotoPath = "~/Images/noimage.jpg"
              }
           );
     }
