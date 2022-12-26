@@ -23,4 +23,16 @@
     <Folder Include="Security\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Home\Create.cshtml" />
+    <None Include="Views\Home\Details.cshtml" />
+    <None Include="Views\Home\Edit.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Shared\Error.cshtml" />
+    <None Include="Views\Shared\NotFound.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_LoginPartial.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+  </ItemGroup>
+
 </Project>

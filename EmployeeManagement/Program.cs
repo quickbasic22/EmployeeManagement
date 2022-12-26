@@ -1,6 +1,3 @@
-
-
-
 using EmployeeManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Configuration;
@@ -11,7 +8,6 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagement.Data;
-using EmployeeManagement.Areas.Identity.Data;
 
 internal class Program
 {
@@ -23,7 +19,7 @@ internal class Program
 
         builder.Services.AddDbContext<EmployeeManagementContext>(options => options.UseSqlServer(connectionString));
 
-        builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EmployeeManagementContext>();
+        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EmployeeManagementContext>();
 
 
         builder.Services.AddControllersWithViews().AddXmlSerializerFormatters();

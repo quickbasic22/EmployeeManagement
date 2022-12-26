@@ -17,14 +17,14 @@ namespace EmployeeManagement.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly IUserStore<AppUser> _userStore;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
 
         public ExternalLoginsModel(
-            UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager,
-            IUserStore<AppUser> userStore)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IUserStore<ApplicationUser> userStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -70,7 +70,7 @@ namespace EmployeeManagement.Areas.Identity.Pages.Account.Manage
                 .ToList();
 
             string passwordHash = null;
-            if (_userStore is IUserPasswordStore<AppUser> userPasswordStore)
+            if (_userStore is IUserPasswordStore<ApplicationUser> userPasswordStore)
             {
                 passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
             }
