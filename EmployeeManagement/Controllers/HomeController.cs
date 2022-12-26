@@ -14,41 +14,43 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
         private readonly ILogger logger;
-        private readonly IDataProtector protector;
+        //private readonly DataProtectionPurposeStrings dataProtectionPurposeStrings;
+        //private readonly IDataProtector protector;
 
         public HomeController(IEmployeeRepository employeeRepository,
-                              IHostingEnvironment hostingEnvironment,
-                              ILogger<HomeController> logger,
-                              IDataProtectionProvider dataProtectionProvider,
-                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
+                              IWebHostEnvironment hostingEnvironment,
+                              ILogger<HomeController> logger)
+                              //IDataProtectionProvider dataProtectionProvider,
+                              //DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _employeeRepository = employeeRepository;
             this.hostingEnvironment = hostingEnvironment;
             this.logger = logger;
-            protector = dataProtectionProvider
-                .CreateProtector(dataProtectionPurposeStrings.EmployeeIdRouteValue);
+            //this.dataProtectionPurposeStrings = dataProtectionPurposeStrings;
+            //protector = dataProtectionProvider
+            //    .CreateProtector(dataProtectionPurposeStrings.EmployeeIdRouteValue);
         }
 
         [AllowAnonymous]
         public ViewResult Index()
         {
-            var model = _employeeRepository.GetAllEmployee()
-                            .Select(e =>
-                            {
-                                e.EncryptedId = protector.Protect(e.Id.ToString());
-                                return e;
-                            });
+            var model = _employeeRepository.GetAllEmployee();
+                            //.Select(e =>
+                            //{
+                            //    e.EncryptedId = protector.Protect(e.Id.ToString());
+                            //    return e;
+                            //});
             return View(model);
         }
 
         [AllowAnonymous]
-        public ViewResult Details(string id)
+        public ViewResult Details(int id)
         {
             //throw new Exception("Error in Details View");
 
@@ -59,14 +61,14 @@ namespace EmployeeManagement.Controllers
             logger.LogError("Error Log");
             logger.LogCritical("Critical Log");
 
-            int employeeId = Convert.ToInt32(protector.Unprotect(id));
+            //int employeeId = Convert.ToInt32(protector.Unprotect(id));
 
-            Employee employee = _employeeRepository.GetEmployee(employeeId);
+            Employee employee = _employeeRepository.GetEmployee(id);
 
             if (employee == null)
             {
                 Response.StatusCode = 404;
-                return View("EmployeeNotFound", employeeId);
+                return View("EmployeeNotFound", id);
             }
 
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
@@ -77,13 +79,7 @@ namespace EmployeeManagement.Controllers
 
             return View(homeDetailsViewModel);
         }
-
-        [HttpGet]
-        public ViewResult Create()
-        {
-            return View();
-        }
-
+       
         [HttpGet]
         public ViewResult Edit(int id)
         {
@@ -143,7 +139,11 @@ namespace EmployeeManagement.Controllers
 
             return uniqueFileName;
         }
-
+        [HttpGet]
+        public ViewResult Create()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult Create(EmployeeCreateViewModel model)
         {

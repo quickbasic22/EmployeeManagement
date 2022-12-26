@@ -1,48 +1,63 @@
-﻿using EmployeeManagement.Data;
+﻿using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EmployeeManagement.Models
 {
-    public class SqlEmployeeRepository : IEmployeeRepository
+    public class SQLEmployeeRepository : IEmployeeRepository
     {
-        private readonly EmployeeManagementContext _context;
+        private readonly AppDbContext context;
+        private readonly ILogger<SQLEmployeeRepository> logger;
 
-        public SqlEmployeeRepository(EmployeeManagementContext context)
+        public SQLEmployeeRepository(AppDbContext context,
+                                    ILogger<SQLEmployeeRepository> logger)
         {
-            this._context = context;
+            this.context = context;
+            this.logger = logger;
         }
+
         public Employee Add(Employee employee)
         {
-            _context.Add(employee);
-            _context.SaveChanges();
+            context.Employees.Add(employee);
+            context.SaveChanges();
             return employee;
         }
 
         public Employee Delete(int id)
         {
-            Employee employee = _context.Employees.Find(id);
+            Employee employee = context.Employees.Find(id);
             if (employee != null)
             {
-                _context.Employees.Remove(employee);
-                _context.SaveChanges();
+                context.Employees.Remove(employee);
+                context.SaveChanges();
             }
             return employee;
         }
 
-        public IEnumerable<Employee> GetAllEmployees()
+        public IEnumerable<Employee> GetAllEmployee()
         {
-           return _context.Employees;
+            return context.Employees;
         }
 
-        public Employee GetEmployee(int id)
+        public Employee GetEmployee(int Id)
         {
-            return _context.Employees.Find(id);
+            logger.LogTrace("Trace Log");
+            logger.LogDebug("Debug Log");
+            logger.LogInformation("Information Log");
+            logger.LogWarning("Warning Log");
+            logger.LogError("Error Log");
+            logger.LogCritical("Critical Log");
+
+            return context.Employees.Find(Id);
         }
 
         public Employee Update(Employee employeeChanges)
         {
-            var employee = _context.Employees.Attach(employeeChanges);
+            var employee = context.Employees.Attach(employeeChanges);
             employee.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            context.SaveChanges();
             return employeeChanges;
         }
     }

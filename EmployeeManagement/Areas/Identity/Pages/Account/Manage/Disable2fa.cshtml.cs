@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EmployeeManagement.Areas.Identity.Data;
+using EmployeeManagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

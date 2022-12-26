@@ -1,9 +1,14 @@
 ﻿body {
-    font-size: large;
+    font-size: medium;
     background-color: lightblue;
 }
 
 .btn 
 {
     width: 75px;
+}
+.imageThumbnail 
+{
+   height: 200px;
+   width: auto;
 }

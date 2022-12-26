@@ -1,5 +1,4 @@
-﻿using EmployeeManagement.Areas.Identity.Data;
-using EmployeeManagement.Models;
+﻿using EmployeeManagement.Models;
 using EmployeeManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

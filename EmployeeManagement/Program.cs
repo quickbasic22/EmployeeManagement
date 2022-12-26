@@ -7,7 +7,6 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using EmployeeManagement.Data;
 
 internal class Program
 {
@@ -17,9 +16,9 @@ internal class Program
 
         var connectionString = builder.Configuration.GetConnectionString("MyConnection") ?? throw new InvalidOperationException("Connection string 'EmployeeManagementContextConnection' not found.");
 
-        builder.Services.AddDbContext<EmployeeManagementContext>(options => options.UseSqlServer(connectionString));
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
-        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EmployeeManagementContext>();
+        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
 
 
         builder.Services.AddControllersWithViews().AddXmlSerializerFormatters();
@@ -27,7 +26,7 @@ internal class Program
         builder.Logging.AddDebug();
 
 
-        builder.Services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
+        builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
        
         // override appsettings
        // builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);

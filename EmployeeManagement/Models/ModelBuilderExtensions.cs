@@ -16,14 +16,24 @@ namespace EmployeeManagement.Models
                         Id = 1,
                         Name = "Mary",
                         Department = Dept.IT,
-                        Email = "mary@pragimtech.com"
+                        Email = "mary@pragimtech.com",
+                        PhotoPath = "~/Images/noimage.jpg"
                     },
                     new Employee
                     {
                         Id = 2,
                         Name = "John",
                         Department = Dept.HR,
-                        Email = "john@pragimtech.com"
+                        Email = "john@pragimtech.com",
+                        PhotoPath = "~/Images/noimage.jpg"
+                    },
+                    new Employee
+                    {
+                        Id = 3,
+                        Name = "Sam",
+                        Department = Dept.IT,
+                        Email = "sam@pragimtech.com",
+                        PhotoPath = "~/Images/noimage.jpg"
                     }
                 );
         }
