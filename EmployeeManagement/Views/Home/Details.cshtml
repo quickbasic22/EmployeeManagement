@@ -18,9 +18,11 @@
                 <h4>Email : @Model.Employee.Email</h4>
                 <h4>Department : @Model.Employee.Department</h4>
             </div>
-            <div href="#" class="btn btn-primary align-content-between">Back</div>
-            <div href="#" class="btn btn-primary align-content-between">Edit</div>
-            <div href="#" class="btn btn-danger align-content-between">Delete</div>
+            <div class="card-footer text-center">
+                <a asp-asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
+                <a asp-action="edit" asp-route-id="@Model.Employee.Id" class="btn btn-primary">Edit</a>
+                <a asp-action="delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>
+            </div>
         </div>
     </div>
 </div>

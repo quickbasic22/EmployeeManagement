@@ -10,25 +10,25 @@ namespace EmployeeManagement.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly EmployeeManagementContext _employeeRepository;
+        private readonly EmployeeManagementContext _DbContext;
 
-        public HomeController(EmployeeManagementContext context)
+        public HomeController(EmployeeManagementContext Dbcontext)
         {
-            this._employeeRepository = context;
+            this._DbContext = Dbcontext;
         }
         public IActionResult Index()
         {
-            var model = _employeeRepository.Employees.ToList();
+            var model = _DbContext.Employees.ToList();
             return View(model);
         }
         public IActionResult Edit(int id)
         {
-            Employee model = _employeeRepository.GetEmployee(id);
+            Employee model = _DbContext.Employees.Find(id);
             return View(model);
         }
         public IActionResult Details(int id)
         {
-            var employee = _employeeRepository.GetEmployee(id);
+            var employee = _DbContext.Employees.Find(id);
 
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel();
             homeDetailsViewModel.Employee = employee;
@@ -47,7 +47,10 @@ namespace EmployeeManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-               
+                Employee newEmployee = new Employee();
+                newEmployee = employee;
+                _DbContext.Employees.Add(newEmployee);
+                _DbContext.SaveChanges();
             }
             return View(employee);
         }

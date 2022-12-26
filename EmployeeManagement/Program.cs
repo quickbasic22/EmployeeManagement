@@ -23,7 +23,7 @@ internal class Program
 
         builder.Services.AddDbContext<EmployeeManagementContext>(options => options.UseSqlServer(connectionString));
 
-        builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EmployeeManagementContext>();
+        builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EmployeeManagementContext>();
 
 
         builder.Services.AddControllersWithViews().AddXmlSerializerFormatters();
@@ -31,7 +31,7 @@ internal class Program
         builder.Logging.AddDebug();
 
 
-        // builder.Services.AddSingleton<IEmployeeRepository, EmployeeManagementContext>();
+        builder.Services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
        
         // override appsettings
        // builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);

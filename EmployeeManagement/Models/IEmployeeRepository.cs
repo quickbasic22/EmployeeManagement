@@ -4,6 +4,8 @@
     {
         Employee GetEmployee(int id);
         IEnumerable<Employee> GetAllEmployees();
-        void Save(Employee employee);
+        Employee Add(Employee employee);
+        Employee Update(Employee employee);
+        Employee Delete(int id);
     }
 }
