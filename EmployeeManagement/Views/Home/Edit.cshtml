@@ -2,7 +2,15 @@
 
 @{
     ViewBag.Title = "Edit Employee";
-    var photoPath = "~/Images/" + (Model.ExistingPhotoPath ?? "noimage.jpg");
+    var photoPath = "";
+    if (!Model.ExistingPhotoPath.Contains("~/Images/noimage.jpg"))
+    {
+        photoPath = "~/Images/" + (Model.ExistingPhotoPath ?? "noimage.jpg");
+    }
+    else
+    {
+        photoPath = Model.ExistingPhotoPath;
+    }
 }
 
 <form enctype="multipart/form-data" asp-controller="home" asp-action="edit"
@@ -58,9 +66,12 @@
                class="btn btn-primary">Cancel</a>
         </div>
     </div>
+</form>
 
-   
-    @section Scripts {
+
+@section Scripts
+    {
+    @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-</form>
+        }

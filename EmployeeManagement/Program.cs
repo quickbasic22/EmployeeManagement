@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NLog.Web;
 using NLog;
+using Microsoft.AspNetCore.Authorization;
+using EmployeeManagement.Security;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 internal class Program
 {
@@ -22,19 +25,65 @@ internal class Program
 
             builder.Host.UseNLog();
 
+            builder.Services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+                options.EnableEndpointRouting = false;
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
             var connectionString = builder.Configuration.GetConnectionString("MyConnection") ?? throw new InvalidOperationException("Connection string 'EmployeeManagementContextConnection' not found.");
 
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 3;
+                options.Password.RequiredUniqueChars = 1;
+
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+            });
 
 
             builder.Services.AddControllersWithViews().AddXmlSerializerFormatters();
 
             builder.Logging.AddDebug();
 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DeleteRolePolicy",
+                    policy => policy.RequireClaim("Delete Role"));
+
+                options.AddPolicy("EditRolePolicy",
+                    policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
+                options.AddPolicy("AdminRolePolicy",
+                    policy => policy.RequireRole("Admin"));
+            });
+
 
             builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+
+            builder.Services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+            builder.Services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+            builder.Services.AddSingleton<DataProtectionPurposeStrings>();
 
             // override appsettings
             // builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -54,17 +103,26 @@ internal class Program
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
+            }
 
             app.UseStaticFiles();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //    app.MapControllerRoute(
+            //name: "default",
+            //pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
 
 
             //var text = "<hr />";

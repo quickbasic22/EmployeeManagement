@@ -27,16 +27,16 @@
             </div>
 
             <img class="card-img-top imageThumbnail" src="@photoPath"
-                 asp-append-version="true" />
+                 asp-append-version="true" width="100" alt="Employee Image" title="Employee Image" />
 
             <div class="card-footer text-center">
                 <a asp-controller="home" asp-action="details"
-                   asp-route-id="@employee.EncryptedId"
+                   asp-route-id="@employee.Id" title="Details"
                    class="btn btn-primary m-1">View</a>
                 <a asp-action="edit" asp-controller="home"
-                   asp-route-id="@employee.Id"
+                   asp-route-id="@employee.Id" title="Edit"
                    class="btn btn-primary m-1">Edit</a>
-                <a href="#" class="btn btn-danger m-1">Delete</a>
+                <a asp-controller="Home" asp-action="Delete" class="btn btn-danger m-1">Delete</a>
             </div>
         </div>
     }

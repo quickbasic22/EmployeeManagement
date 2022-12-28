@@ -14,27 +14,24 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
 {
-    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IWebHostEnvironment hostingEnvironment;
         private readonly ILogger logger;
-        //private readonly DataProtectionPurposeStrings dataProtectionPurposeStrings;
-        //private readonly IDataProtector protector;
+        private readonly IDataProtector protector;
 
         public HomeController(IEmployeeRepository employeeRepository,
                               IWebHostEnvironment hostingEnvironment,
-                              ILogger<HomeController> logger)
-                              //IDataProtectionProvider dataProtectionProvider,
-                              //DataProtectionPurposeStrings dataProtectionPurposeStrings)
+                              ILogger<HomeController> logger,
+                              IDataProtectionProvider dataProtectionProvider,
+                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _employeeRepository = employeeRepository;
             this.hostingEnvironment = hostingEnvironment;
             this.logger = logger;
-            //this.dataProtectionPurposeStrings = dataProtectionPurposeStrings;
-            //protector = dataProtectionProvider
-            //    .CreateProtector(dataProtectionPurposeStrings.EmployeeIdRouteValue);
+            protector = dataProtectionProvider
+                .CreateProtector(dataProtectionPurposeStrings.EmployeeIdRouteValue);
         }
 
         [AllowAnonymous]
@@ -79,7 +76,13 @@ namespace EmployeeManagement.Controllers
 
             return View(homeDetailsViewModel);
         }
-       
+
+        [HttpGet]
+        public ViewResult Create()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ViewResult Edit(int id)
         {
@@ -123,6 +126,15 @@ namespace EmployeeManagement.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+           var employee = _employeeRepository.GetEmployee(id);
+            _employeeRepository.Delete(employee.Id);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         private string ProcessUploadedFile(EmployeeCreateViewModel model)
         {
             string uniqueFileName = null;
@@ -139,11 +151,7 @@ namespace EmployeeManagement.Controllers
 
             return uniqueFileName;
         }
-        [HttpGet]
-        public ViewResult Create()
-        {
-            return View();
-        }
+
         [HttpPost]
         public IActionResult Create(EmployeeCreateViewModel model)
         {
