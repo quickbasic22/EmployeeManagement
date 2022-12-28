@@ -133,12 +133,12 @@ namespace EmployeeManagement.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            if (_employeeRepository.GetEmployee(id.Value) == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var employee = _employeeRepository.GetAllEmployee().FirstOrDefault(i => i.Equals(id));
+            var employee = _employeeRepository.GetEmployee(id.Value);
             if (employee == null)
             {
                 return NotFound();
@@ -147,24 +147,23 @@ namespace EmployeeManagement.Controllers
             return View(employee);
         }
 
+
         // POST: Employees/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (_employeeRepository.GetEmployee(id) == null)
-            {
-                return Problem("Entity set 'AppDbContext.Employees'  is null.");
-            }
             var employee = _employeeRepository.GetEmployee(id);
-            if (employee != null)
+            if (employee == null)
             {
-                _employeeRepository.Delete(employee.Id);
+                return NotFound();
             }
 
+            _employeeRepository.Delete(employee.Id);
             return RedirectToAction(nameof(Index));
         }
+
 
         private string ProcessUploadedFile(EmployeeCreateViewModel model)
         {
