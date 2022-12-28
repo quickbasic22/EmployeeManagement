@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -126,13 +129,41 @@ namespace EmployeeManagement.Controllers
             return View();
         }
 
+        // GET: Employees/Delete/5
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int? id)
         {
-           var employee = _employeeRepository.GetEmployee(id);
-            _employeeRepository.Delete(employee.Id);
+            if (_employeeRepository.GetEmployee(id.Value) == null)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction("Index", "Home");
+            var employee = _employeeRepository.GetAllEmployee().FirstOrDefault(i => i.Equals(id));
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return View(employee);
+        }
+
+        // POST: Employees/Delete/5
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            if (_employeeRepository.GetEmployee(id) == null)
+            {
+                return Problem("Entity set 'AppDbContext.Employees'  is null.");
+            }
+            var employee = _employeeRepository.GetEmployee(id);
+            if (employee != null)
+            {
+                _employeeRepository.Delete(employee.Id);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         private string ProcessUploadedFile(EmployeeCreateViewModel model)

@@ -237,10 +237,10 @@ namespace EmployeeManagement.Controllers
 
                 if (result.Succeeded)
                 {
-                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                   // var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
                     var confirmationLink = Url.Action("ConfirmEmail", "Account",
-                                            new { userId = user.Id, token = token }, Request.Scheme);
+                                            new { userId = user.Id }, Request.Scheme);
 
                     logger.Log(LogLevel.Warning, confirmationLink);
 
@@ -309,7 +309,7 @@ namespace EmployeeManagement.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+           // model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
