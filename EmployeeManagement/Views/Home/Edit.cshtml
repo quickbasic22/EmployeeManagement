@@ -68,7 +68,9 @@
     </div>
     
     @section Scripts {
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
         <script>
             $(document).ready(function () {
                 $('.custom-file-input').on("change", function () {
