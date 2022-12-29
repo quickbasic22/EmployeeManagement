@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
 {
-    
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;

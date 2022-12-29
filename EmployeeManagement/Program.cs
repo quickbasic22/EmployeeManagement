@@ -30,7 +30,7 @@ internal class Program
                 var policy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
-                options.EnableEndpointRouting = false;
+                options.EnableEndpointRouting = true;
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
 
@@ -115,14 +115,14 @@ internal class Program
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //    app.MapControllerRoute(
-            //name: "default",
-            //pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            });
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            //});
 
 
             //var text = "<hr />";

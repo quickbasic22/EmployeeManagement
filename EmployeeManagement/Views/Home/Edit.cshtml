@@ -66,12 +66,19 @@
                class="btn btn-primary">Cancel</a>
         </div>
     </div>
+    
+    @section Scripts {
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            });
+        </script>
+    }
+
 </form>
 
-
-@section Scripts
-    {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-        }
+   

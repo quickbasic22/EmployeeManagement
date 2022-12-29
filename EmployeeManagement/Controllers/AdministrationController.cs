@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace EmployeeManagement.Controllers
 {
     //[Authorize(Policy = "AdminRolePolicy")]
+    [AllowAnonymous]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -164,12 +165,13 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
+        // [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
             ViewBag.userId = userId;
 
-            var user = await userManager.FindByIdAsync(userId);
+            var users = userManager.Users.AsNoTracking().ToList();
+            var user = users.Find(a => a.Id == userId);
 
             if (user == null)
             {
@@ -179,22 +181,30 @@ namespace EmployeeManagement.Controllers
 
             var model = new List<UserRolesViewModel>();
 
-            foreach(var role in roleManager.Roles)
+            foreach(var role in roleManager.Roles.AsNoTracking().ToList())
             {
                 var userRolesViewModel = new UserRolesViewModel
                 {
                     RoleId = role.Id,
                     RoleName = role.Name
                 };
-
-                if (await userManager.IsInRoleAsync(user, role.Name))
+                try
                 {
-                    userRolesViewModel.IsSelected = true;
+                    if (role.Name.ToString() != null && await userManager.IsInRoleAsync(user, role.Name.ToString()))
+                    {
+                        userRolesViewModel.IsSelected = true;
+                    }
+                    else
+                    {
+                        userRolesViewModel.IsSelected = false;
+                    }
                 }
-                else
+                catch (Exception? ex)
                 {
-                    userRolesViewModel.IsSelected = false;
+                    logger.LogDebug(ex.Message.ToString());
+                    logger.LogDebug(ex.InnerException.ToString());
                 }
+                
 
                 model.Add(userRolesViewModel);
             }
@@ -203,7 +213,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
@@ -264,7 +274,8 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "DeleteRolePolicy")]
+        [AllowAnonymous]
+        //[Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
