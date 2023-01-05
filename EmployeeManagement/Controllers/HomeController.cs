@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -104,6 +105,7 @@ namespace EmployeeManagement.Controllers
         [HttpPost]
         public IActionResult Edit(EmployeeEditViewModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 Employee employee = _employeeRepository.GetEmployee(model.Id);
@@ -114,9 +116,9 @@ namespace EmployeeManagement.Controllers
                 {
                     if (model.ExistingPhotoPath != null)
                     {
-                        string filePath = Path.Combine(hostingEnvironment.WebRootPath,
-                            "images", model.ExistingPhotoPath);
-                        System.IO.File.Delete(filePath);
+                        //string filePath = Path.Combine(hostingEnvironment.WebRootPath,
+                        //    "images", model.ExistingPhotoPath);
+                        System.IO.File.Delete(model.ExistingPhotoPath);
                     }
                     employee.PhotoPath = ProcessUploadedFile(model);
 
